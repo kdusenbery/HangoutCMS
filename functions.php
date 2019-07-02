@@ -218,7 +218,20 @@
             $post_id = $_POST['update_id'];
             $post_title = $_POST['update_title'];
             $post_category_id = $_POST['update_category_id'];
-            $post_status = 1;
+            
+            $getApproval = "SELECT post_approval FROM approval WHERE approval_id = 1";
+            $execute_getApproval = mysqli_query($connection, $getApproval);
+            
+            while($row = mysqli_fetch_assoc($execute_getApproval)) {
+                $post_approval = $row["post_approval"];
+                
+                if($post_approval == 0) {
+                    $post_status = 2;
+                } else {
+                    $post_status = 1;
+                }
+            }
+            
             $post_image = $_FILES['update_image']['name'];
                 $post_image_temp = $_FILES['update_image']['tmp_name'];
                 move_uploaded_file($post_image_temp, "images/$post_image");
